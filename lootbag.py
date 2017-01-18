@@ -115,21 +115,31 @@ class LootBag():
 			c.execute("""SELECT c.Happy
 				FROM Child c
 				WHERE c.Name = '{}'
-				AND  c.Happy = 1
-			""")
+				AND  c.Happy = 0
+			""".format(child)) #make sure you use .format to input values expected or you'll get nothing
 			results = c.fetchall()
 			if results:
-				print(results)
+				not_happy = results[0][0]
+				return not_happy
 			else:
-				print("{} is not happy.".format(child))
+				print("{}'s toys have been delivered.".format(child))
 
 
 	def deliver_toys_to_child(self, child):
 
-		self.assertFalse(bag.is_child_happy(child))
-
 		with sqlite3.connect('lootbag.db') as conn:
 			c = conn.cursor()
+
+			if (self.is_child_happy(child) == 0):
+				c.execute("""UPDATE Child
+					SET Happy = 1
+					WHERE Name = '{}'
+				""".format(child))
+				happy = c.fetchall()
+				print(happy)
+
+
+
 
 
 
@@ -147,6 +157,6 @@ if __name__ == "__main__":
 		bag.get_toy_by_child(sys.argv[2])
 	elif sys.argv[1] == "ls_all":
 		bag.list_all_children()
-	elif sys.argv[1] == "is_happy":
-		bag.is_child_happy(sys.argv[2])
+	elif sys.argv[1] == "delivered":
+		bag.deliver_toys_to_child(sys.argv[2])
 
