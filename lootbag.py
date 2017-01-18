@@ -23,7 +23,7 @@ class LootBag():
 			try:
 				c.execute("INSERT INTO Child VALUES (?, ?, ?)",
 					(None, child, 0))
-			except sqlite3.OperationalError:
+			except sqlite3.IntegrityError:
 				pass
 
 			c.execute("select ChildId FROM Child WHERE Name='{}'".format(child)) #need single '' around {} because it is string
