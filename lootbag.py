@@ -98,7 +98,9 @@ class LootBag():
 				WHERE t.ToyId
 				AND c.ChildId = t.ChildId
 			""")
-			results = c.fetchall()
+			results = set(c.fetchall()) #set will not print duplicates, so use here is essential with the way loop is written
+
+
 
 			print(results) #This works but repeats name. Change to set to only have one
 
