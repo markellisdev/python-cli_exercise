@@ -107,6 +107,32 @@ class LootBag():
 # Original code to pass test
 # 		return [kid for kid in self.good_children.keys()] #returning list of all (keys) children
 
+	def is_child_happy(self, child):
+
+		with sqlite3.connect('lootbag.db') as conn:
+			c = conn.cursor()
+
+			c.execute("""SELECT c.Happy
+				FROM Child c
+				WHERE c.Name = '{}'
+				AND  c.Happy = 1
+			""")
+			results = c.fetchall()
+			if results:
+				print(results)
+			else:
+				print("{} is not happy.".format(child))
+
+
+	def deliver_toys_to_child(self, child):
+
+		self.assertFalse(bag.is_child_happy(child))
+
+		with sqlite3.connect('lootbag.db') as conn:
+			c = conn.cursor()
+
+
+
 
 if __name__ == "__main__":
 	bag = LootBag()
@@ -121,4 +147,6 @@ if __name__ == "__main__":
 		bag.get_toy_by_child(sys.argv[2])
 	elif sys.argv[1] == "ls_all":
 		bag.list_all_children()
+	elif sys.argv[1] == "is_happy":
+		bag.is_child_happy(sys.argv[2])
 
